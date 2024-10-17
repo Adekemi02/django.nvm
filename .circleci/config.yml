@@ -21,10 +21,10 @@ jobs:
     machine: true                                        # What is this for?
     steps:
       - checkout
-
       - run: |
-          docker build -t $DOCKER_USERNAME/django.nv .   # Build the application into Docker image
-          docker push $DOCKER_USERNAME/django.nv         # Push the image into registry
+	  echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+          docker build -t $DOCKER_USERNAME/django.nvm .   # Build the application into Docker image
+          docker push $DOCKER_USERNAME/django.nvm         # Push the image into registry
 
   integration:
     docker:
@@ -50,6 +50,7 @@ workflows:
     jobs:
       - build
       - test
+      - release
       - integration
       - prod:
           type: approval
